@@ -3,6 +3,8 @@ import axios from "axios";
 import WeatherMainCard from "../components/CityWeather/WeatherMainCard";
 import SecondaryCard from "../components/SecondaryCard";
 import Locations from "./Locations"
+import Modal from "../components/Forecast/Modal";
+import ForecastCard from "../components/Forecast/ForecastCard";
 import IndividualDayWeather from "../components/Forecast/IndividualDayWeather";
 import { FaWind, FaRegCalendar, FaRegSun, FaEye } from "react-icons/fa";
 import { MdOutlineThunderstorm } from "react-icons/md";
@@ -18,6 +20,7 @@ const CityWeather = () => {
   const [locationsWeather, setLocationsWeather] = useState([])
   const [mainWeather, setMainWeather] = useState({})
   const [weatherRetrieved, setWeatherRetrieved] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   
   useEffect(() => {
     axios.get('https://api.openweathermap.org/data/2.5/forecast?q=Monterrey&appid=2d01c70ee65ad0f2d6c2d40d5d9ac229&units=metric').then(response =>{
@@ -141,6 +144,7 @@ const CityWeather = () => {
           <div className="h-40 min-h-40 xs:col-span-12 sm:col-span-3 sm:hidden md:block px-3 my-3">
             <SecondaryCard
               Icon={FaRegCalendar}
+              onClick={() => setIsModalOpen(true)}
               content={
                 <>
                   <div className="h-[100%] col-span-12 flex flex-col justify-start items-start">
@@ -193,6 +197,9 @@ const CityWeather = () => {
         <Locations locationsWeather={locationsWeather} setMainWeather={setMainWeather} />
       </div>
     </div>
+    <Modal isOpen={isModalOpen} toggleModal={(()  => setIsModalOpen(false))}>
+      <ForecastCard forecast={MonterreyForecast} />
+    </Modal>
     </>
   )
 }
